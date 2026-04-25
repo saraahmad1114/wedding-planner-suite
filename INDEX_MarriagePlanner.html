@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Planner Suite - Plan Your Perfect Day</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --modern-primary: #667eea;
+            --modern-secondary: #764ba2;
+            --boho-primary: #d4a574;
+            --boho-secondary: #b8956a;
+            --classic-primary: #1a1a1a;
+            --classic-secondary: #d4af37;
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: var(--spacing-lg);
+            color: #2c3e50;
+        }
+
+        body.modern {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --light: #f7fafc;
+            --text: #2d3748;
+            --border: #e2e8f0;
+            --shadow: rgba(102, 126, 234, 0.12);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body.boho {
+            --primary: #d4a574;
+            --secondary: #b8956a;
+            --accent: #e8c4b8;
+            --light: #f5e6d3;
+            --text: #5c4033;
+            --border: #e8c4b8;
+            --shadow: rgba(212, 165, 116, 0.12);
+            background: linear-gradient(135deg, #f4e4c1 0%, #e8b4b8 100%);
+        }
+
+        body.classic {
+            --primary: #1a1a1a;
+            --secondary: #d4af37;
+            --accent: #c0c0c0;
+            --light: #f9f9f9;
+            --text: #1a1a1a;
+            --border: #e0e0e0;
+            --shadow: rgba(0, 0, 0, 0.08);
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: slideUp 0.7s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            font-size: 4.5em;
+            margin-bottom: var(--spacing-lg);
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            margin-bottom: var(--spacing-md);
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25em;
+            opacity: 0.95;
+            margin-bottom: var(--spacing-lg);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 0.95em;
+            opacity: 0.85;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            padding-top: var(--spacing-xl);
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .theme-btn {
+            padding: 11px 26px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        /* NAVIGATION */
+        .nav-tabs {
+            display: flex;
+            background: linear-gradient(90deg, var(--light) 0%, white 100%);
+            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+            padding: 0 var(--spacing-lg);
+            gap: var(--spacing-sm);
+            scroll-behavior: smooth;
+        }
+
+        .nav-tab {
+            padding: 18px 24px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .nav-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-tab:hover {
+            color: var(--primary);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .nav-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* CONTENT AREA */
+        .content {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* TYPOGRAPHY */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: var(--spacing-xl);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            letter-spacing: -0.5px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, transparent 100%);
+            border-radius: 2px;
+            max-width: 200px;
+        }
+
+        .section-description {
+            color: #718096;
+            font-size: 1.05em;
+            margin-bottom: var(--spacing-xl);
+            line-height: 1.7;
+            max-width: 800px;
+        }
+
+        /* FORMS */
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.95em;
+            letter-spacing: 0.3px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="email"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-family: inherit;
+            background: white;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        button {
+            padding: 15px 32px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 20px var(--shadow);
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px var(--shadow);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        /* DASHBOARD CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: var(--spacing-xl);
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 12px 40px var(--shadow);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+            pointer-events: none;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 18px 55px var(--shadow);
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-bottom: var(--spacing-md);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 2.8em;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* LIST ITEMS */
+        .item-card {
+            background: linear-gradient(135deg, var(--light) 0%, white 100%);
+            padding: var(--spacing-lg);
+            border-radius: 14px;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--primary);
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        .item-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .item-info strong {
+            color: var(--primary);
+            font-size: 1.05em;
+        }
+
+        .item-info small {
+            color: #718096;
+            display: block;
+            margin-top: var(--spacing-sm);
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            padding: 9px 18px;
+            font-size: 0.85em;
+            border-radius: 8px;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        /* PROGRESS BAR */
+        .progress-container {
+            margin: var(--spacing-lg) 0;
+        }
+
+        .progress-label {
+            color: var(--text);
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 28px;
+            background: var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.85em;
+            font-weight: 700;
+            border-radius: 14px;
+        }
+
+        /* CHECKLISTS */
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 16px var(--spacing-lg);
+            background: var(--light);
+            margin-bottom: var(--spacing-sm);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .checklist-item:hover {
+            background: white;
+            border-left-color: var(--primary);
+            transform: translateX(6px);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            margin-right: var(--spacing-lg);
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checklist-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+            color: #a0aec0;
+        }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            padding: var(--spacing-xl) 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: var(--spacing-xl);
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 21px;
+            top: 60px;
+            width: 2px;
+            height: calc(100% + 24px);
+            background: var(--border);
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-dot {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border: 4px solid white;
+            border-radius: 50%;
+            margin-right: var(--spacing-lg);
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2em;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-content {
+            padding: var(--spacing-lg) var(--spacing-xl);
+            background: linear-gradient(135deg, var(--light) 0%, white 100%);
+            border-radius: 14px;
+            flex: 1;
+            border-left: 3px solid var(--primary);
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        .timeline-content h4 {
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.15em;
+            font-weight: 700;
+        }
+
+        .timeline-content p {
+            color: #718096;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .timeline-content small {
+            color: #a0aec0;
+        }
+
+        /* SUMMARY BOXES */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--spacing-lg);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, var(--light) 0%, white 100%);
+            padding: var(--spacing-xl);
+            border-radius: 16px;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 6px 20px var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .summary-box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px var(--shadow);
+        }
+
+        .summary-box h4 {
+            color: var(--text);
+            margin-bottom: var(--spacing-md);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            font-weight: 700;
+        }
+
+        .summary-box p {
+            font-size: 2.2em;
+            color: var(--primary);
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* SUCCESS MESSAGE */
+        .success-message {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 18px 24px;
+            border-radius: 12px;
+            margin-bottom: var(--spacing-lg);
+            display: none;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.2);
+            animation: slideDown 0.4s;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2em;
+            }
+
+            .section-title {
+                font-size: 1.8em;
+            }
+
+            .section-title::after {
+                display: none;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tab {
+                padding: 14px 16px;
+                font-size: 0.85em;
+            }
+
+            .content {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+
+            .hero {
+                padding: var(--spacing-xl) var(--spacing-md);
+            }
+
+            .hero h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body class="modern">
+    <div class="container">
+        <!-- HERO SECTION -->
+        <div class="hero">
+            <div class="hero-content">
+                <span class="hero-icon">💒</span>
+                <h1>Wedding Planner Suite</h1>
+                <p>Your Complete Wedding Planning Companion</p>
+                <p class="hero-subtitle">Professional-Grade Planning Tool with Real-Time Budget Tracking, Guest Management, Vendor Coordination & So Much More</p>
+                
+                <div class="theme-selector">
+                    <button class="theme-btn active" onclick="setTheme('modern')">✨ Modern</button>
+                    <button class="theme-btn" onclick="setTheme('boho')">🌸 Boho</button>
+                    <button class="theme-btn" onclick="setTheme('classic')">👑 Classic</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="switchTab('budget')">💰 Budget</button>
+            <button class="nav-tab" onclick="switchTab('guests')">👥 Guests</button>
+            <button class="nav-tab" onclick="switchTab('vendors')">🎯 Vendors</button>
+            <button class="nav-tab" onclick="switchTab('timeline')">📅 Timeline</button>
+            <button class="nav-tab" onclick="switchTab('checklist')">✓ Checklist</button>
+            <button class="nav-tab" onclick="switchTab('details')">💍 Details</button>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- DASHBOARD -->
+            <div id="dashboard" class="tab-content active">
+                <h2 class="section-title">📊 Wedding Dashboard</h2>
+                <p class="section-description">Your complete wedding overview at a glance. Monitor your budget, track RSVPs, and stay on top of every detail with real-time updates.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Budget</div>
+                        <div class="stat-value" id="totalBudgetDisplay">$0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Amount Allocated</div>
+                        <div class="stat-value" id="totalSpentDisplay">$0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Remaining Budget</div>
+                        <div class="stat-value" id="remainingBudgetDisplay">$0</div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Budget Utilization</span>
+                        <span id="budgetPercentage">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="budgetProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="summary-grid" style="margin-top: var(--spacing-2xl);">
+                    <div class="summary-box">
+                        <h4>Total Guests</h4>
+                        <p id="guestCountDisplay">0</p>
+                    </div>
+                    <div class="summary-box">
+                        <h4>RSVPs Confirmed</h4>
+                        <p id="rsvpCountDisplay">0</p>
+                    </div>
+                    <div class="summary-box">
+                        <h4>Vendors Booked</h4>
+                        <p id="vendorCountDisplay">0</p>
+                    </div>
+                    <div class="summary-box">
+                        <h4>Days Until Wedding</h4>
+                        <p id="daysCountDisplay">-</p>
+                    </div>
+                </div>
+
+                <button onclick="window.print()" style="width: 100%; margin-top: var(--spacing-xl); padding: 16px;">🖨️ Print Your Wedding Dashboard</button>
+            </div>
+
+            <!-- BUDGET TAB -->
+            <div id="budget" class="tab-content">
+                <h2 class="section-title">💰 Wedding Budget</h2>
+                <p class="section-description">Set your total budget and allocate funds across detailed categories. Watch your spending in real-time with automated calculations.</p>
+                
+                <div class="form-group">
+                    <label>💵 Total Wedding Budget</label>
+                    <input type="number" id="totalBudget" placeholder="Enter your total budget (e.g., 50000)" oninput="updateBudget()" style="font-size: 1.2em; padding: 18px;">
+                </div>
+
+                <h3 style="color: var(--primary); margin: var(--spacing-2xl) 0 var(--spacing-xl) 0; font-size: 1.4em; font-weight: 700;">Budget Categories Breakdown</h3>
+                <div id="budgetCategories" style="margin-bottom: var(--spacing-xl);"></div>
+
+                <button onclick="addBudgetCategory()" style="margin-top: var(--spacing-xl);">+ Add Custom Category</button>
+            </div>
+
+            <!-- GUESTS TAB -->
+            <div id="guests" class="tab-content">
+                <h2 class="section-title">👥 Guest List Manager</h2>
+                <p class="section-description">Manage your guest list efficiently. Track RSVPs, meal preferences, dietary restrictions, and plus-ones all in one place.</p>
+                
+                <div style="background: var(--light); padding: var(--spacing-xl); border-radius: 16px; margin-bottom: var(--spacing-xl);">
+                    <div class="form-group">
+                        <label>Guest Name *</label>
+                        <input type="text" id="guestName" placeholder="Full Name">
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="guestEmail" placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="text" id="guestPhone" placeholder="(123) 456-7890">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>Number of Plus Ones</label>
+                            <input type="number" id="guestPlusOnes" placeholder="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Dietary Restrictions</label>
+                            <input type="text" id="guestDiet" placeholder="e.g., Vegan, Gluten-free">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>RSVP Status</label>
+                            <select id="guestRsvp">
+                                <option value="Pending">⏳ Pending</option>
+                                <option value="Confirmed">✅ Confirmed</option>
+                                <option value="Declined">❌ Declined</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Meal Choice</label>
+                            <select id="guestMeal">
+                                <option value="">Select meal option...</option>
+                                <option value="Chicken">🍗 Chicken</option>
+                                <option value="Fish">🐟 Fish</option>
+                                <option value="Vegetarian">🥗 Vegetarian</option>
+                                <option value="Vegan">🌱 Vegan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="addGuest()" style="width: 100%; margin-top: var(--spacing-lg);">+ Add Guest to List</button>
+                </div>
+
+                <h3 style="color: var(--primary); margin: var(--spacing-xl) 0; font-size: 1.4em; font-weight: 700;">Your Guest List</h3>
+                <div id="guestList"></div>
+            </div>
+
+            <!-- VENDORS TAB -->
+            <div id="vendors" class="tab-content">
+                <h2 class="section-title">🎯 Vendor Management</h2>
+                <p class="section-description">Organize all your wedding vendors in one place. Track quotes, deposits, payments, and contact information with ease.</p>
+                
+                <div style="background: var(--light); padding: var(--spacing-xl); border-radius: 16px; margin-bottom: var(--spacing-xl);">
+                    <div class="form-group">
+                        <label>Vendor Category *</label>
+                        <select id="vendorType">
+                            <option value="">Select category...</option>
+                            <option value="Venue">📍 Venue</option>
+                            <option value="Catering">🍽️ Catering</option>
+                            <option value="Photography">📷 Photography</option>
+                            <option value="Videography">🎥 Videography</option>
+                            <option value="Florist">🌸 Florist</option>
+                            <option value="DJ/Music">🎵 DJ/Music</option>
+                            <option value="Cake">🎂 Cake</option>
+                            <option value="Decorations">✨ Decorations</option>
+                            <option value="Invitations">📮 Invitations</option>
+                            <option value="Rentals">🪑 Rentals</option>
+                            <option value="Transportation">🚗 Transportation</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Vendor Business Name *</label>
+                        <input type="text" id="vendorName" placeholder="e.g., ABC Photography Studio">
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>Contact Person</label>
+                            <input type="text" id="vendorContact" placeholder="John Smith">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="text" id="vendorPhone" placeholder="(123) 456-7890">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>Quote Amount ($)</label>
+                            <input type="number" id="vendorQuote" placeholder="2000">
+                        </div>
+                        <div class="form-group">
+                            <label>Deposit Paid ($)</label>
+                            <input type="number" id="vendorDeposit" placeholder="500">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Current Status</label>
+                        <select id="vendorStatus">
+                            <option value="Inquiry">🔍 Initial Inquiry</option>
+                            <option value="Quote Received">📊 Quote Received</option>
+                            <option value="Negotiating">💬 Negotiating</option>
+                            <option value="Booked">✅ Booked & Confirmed</option>
+                            <option value="Completed">🎉 Service Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notes & Comments</label>
+                        <textarea id="vendorNotes" placeholder="Add important notes about this vendor..." rows="3"></textarea>
+                    </div>
+
+                    <button onclick="addVendor()" style="width: 100%; margin-top: var(--spacing-lg);">+ Add Vendor</button>
+                </div>
+
+                <h3 style="color: var(--primary); margin: var(--spacing-xl) 0; font-size: 1.4em; font-weight: 700;">Your Vendors</h3>
+                <div id="vendorList"></div>
+            </div>
+
+            <!-- TIMELINE TAB -->
+            <div id="timeline" class="tab-content">
+                <h2 class="section-title">📅 Wedding Timeline</h2>
+                <p class="section-description">Visual timeline of your wedding planning journey. Set your wedding date to generate key milestones and planning deadlines.</p>
+                
+                <div style="background: var(--light); padding: var(--spacing-xl); border-radius: 16px; margin-bottom: var(--spacing-2xl);">
+                    <label style="display: block; margin-bottom: var(--spacing-md); font-weight: 600;">🎊 Set Your Wedding Date</label>
+                    <input type="date" id="weddingDate" oninput="updateTimeline()" style="font-size: 1.1em; padding: 16px;">
+                </div>
+
+                <div id="timelineContainer" class="timeline"></div>
+            </div>
+
+            <!-- CHECKLIST TAB -->
+            <div id="checklist" class="tab-content">
+                <h2 class="section-title">✓ Wedding Planning Checklist</h2>
+                <p class="section-description">Your complete wedding planning checklist. Check items off as you complete them to track your progress.</p>
+                
+                <ul class="checklist" id="checklistItems"></ul>
+            </div>
+
+            <!-- DETAILS TAB -->
+            <div id="details" class="tab-content">
+                <h2 class="section-title">💍 Wedding Details & Vision</h2>
+                <p class="section-description">Capture all the essential details about your wedding day and your vision for the celebration.</p>
+                
+                <div style="background: var(--light); padding: var(--spacing-xl); border-radius: 16px;">
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>Bride's Name</label>
+                            <input type="text" id="brideName" placeholder="e.g., Jane Smith">
+                        </div>
+                        <div class="form-group">
+                            <label>Groom's Name</label>
+                            <input type="text" id="groomName" placeholder="e.g., John Johnson">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>Wedding Date</label>
+                            <input type="date" id="weddingDateDetails">
+                        </div>
+                        <div class="form-group">
+                            <label>Ceremony Start Time</label>
+                            <input type="time" id="ceremonyTime">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>Venue Name</label>
+                            <input type="text" id="venueName" placeholder="e.g., The Grand Ballroom">
+                        </div>
+                        <div class="form-group">
+                            <label>Venue Address</label>
+                            <input type="text" id="venueAddress" placeholder="123 Wedding Street, City, State">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>Expected Number of Guests</label>
+                            <input type="number" id="expectedGuests" placeholder="150">
+                        </div>
+                        <div class="form-group">
+                            <label>Wedding Theme/Style</label>
+                            <input type="text" id="weddingTheme" placeholder="e.g., Modern Elegant, Garden Romance">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Wedding Colors Palette</label>
+                        <input type="text" id="weddingColors" placeholder="e.g., Gold, Blush, Ivory, Navy">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Your Wedding Vision & Special Details</label>
+                        <textarea id="weddingNotes" placeholder="Write your wedding vision here. What makes this day special? Any unique details or traditions you want to include?" rows="6"></textarea>
+                    </div>
+
+                    <button onclick="saveWeddingDetails()" style="width: 100%; margin-top: var(--spacing-lg);">💾 Save All Wedding Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const defaultCategories = [
+            { name: 'Venue', budget: 5000 },
+            { name: 'Catering', budget: 8000 },
+            { name: 'Photography', budget: 2500 },
+            { name: 'Flowers & Decorations', budget: 2500 },
+            { name: 'Music/DJ', budget: 1500 },
+            { name: 'Cake/Desserts', budget: 600 },
+            { name: 'Invitations & Stationery', budget: 300 },
+            { name: 'Rentals & Linens', budget: 1200 },
+            { name: 'Miscellaneous', budget: 1000 }
+        ];
+
+        const defaultChecklist = [
+            '12+ Months Before: Get engaged & announce!',
+            '12 Months: Set budget and create guest list',
+            '12 Months: Book your venue',
+            '11 Months: Hire photographer & videographer',
+            '10 Months: Choose your wedding party',
+            '9 Months: Book catering service',
+            '8 Months: Start dress shopping',
+            '8 Months: Book florist & decorator',
+            '6 Months: Send save-the-date notices',
+            '6 Months: Book honeymoon',
+            '3 Months: Get final guest count',
+            '3 Months: Menu tasting & final selection',
+            '1 Month: Final dress fittings',
+            '1 Week: Confirm all vendors',
+            '3 Days: Attend rehearsal dinner',
+            '1 Day Before: Rest & relax!',
+            'Wedding Day: Celebrate your love!',
+            'After: Send thank you notes'
+        ];
+
+        let data = {
+            budgetCategories: [...defaultCategories],
+            guests: [],
+            vendors: [],
+            checklist: defaultChecklist.map(item => ({ text: item, completed: false }))
+        };
+
+        function setTheme(theme) {
+            document.body.className = theme;
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('weddingPlannerTheme', theme);
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updateBudget() {
+            const total = document.getElementById('totalBudget').value;
+            localStorage.setItem('weddingPlannerBudget', total);
+            renderBudgetCategories();
+            updateDashboard();
+        }
+
+        function renderBudgetCategories() {
+            const container = document.getElementById('budgetCategories');
+            container.innerHTML = '';
+            
+            data.budgetCategories.forEach((cat, index) => {
+                const div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `
+                    <div style="flex: 1;">
+                        <strong>${cat.name}</strong>
+                        <small>Budget: $${cat.budget.toLocaleString()}</small>
+                    </div>
+                    <input type="number" value="${cat.budget}" onchange="updateCategory(${index}, this.value)" style="width: 150px; padding: 10px; border: 2px solid var(--border); border-radius: 8px; margin: 0 var(--spacing-lg);">
+                    <button onclick="removeCategory(${index})" style="background: #e74c3c; padding: 8px 16px; font-size: 0.85em;">Remove</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateCategory(index, value) {
+            data.budgetCategories[index].budget = parseFloat(value);
+            updateDashboard();
+        }
+
+        function removeCategory(index) {
+            data.budgetCategories.splice(index, 1);
+            renderBudgetCategories();
+            updateDashboard();
+        }
+
+        function addBudgetCategory() {
+            const name = prompt('Category name:');
+            if (name) {
+                const budget = prompt('Budget amount:');
+                if (budget) {
+                    data.budgetCategories.push({ name, budget: parseFloat(budget) });
+                    renderBudgetCategories();
+                    updateDashboard();
+                }
+            }
+        }
+
+        function addGuest() {
+            const guest = {
+                id: Date.now(),
+                name: document.getElementById('guestName').value,
+                email: document.getElementById('guestEmail').value,
+                phone: document.getElementById('guestPhone').value,
+                plusOnes: parseInt(document.getElementById('guestPlusOnes').value) || 0,
+                diet: document.getElementById('guestDiet').value,
+                rsvp: document.getElementById('guestRsvp').value,
+                meal: document.getElementById('guestMeal').value
+            };
+
+            if (guest.name) {
+                data.guests.push(guest);
+                clearGuestForm();
+                renderGuests();
+                updateDashboard();
+                showSuccess('✨ Guest added to your list!');
+            }
+        }
+
+        function clearGuestForm() {
+            document.getElementById('guestName').value = '';
+            document.getElementById('guestEmail').value = '';
+            document.getElementById('guestPhone').value = '';
+            document.getElementById('guestPlusOnes').value = '0';
+            document.getElementById('guestDiet').value = '';
+            document.getElementById('guestRsvp').value = 'Pending';
+            document.getElementById('guestMeal').value = '';
+        }
+
+        function renderGuests() {
+            const container = document.getElementById('guestList');
+            container.innerHTML = '';
+            
+            if (data.guests.length === 0) {
+                container.innerHTML = '<p style="color: #a0aec0; text-align: center; padding: var(--spacing-xl);">No guests added yet. Start by adding your first guest!</p>';
+                return;
+            }
+
+            data.guests.forEach(guest => {
+                const div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `
+                    <div class="item-info" style="flex: 1;">
+                        <strong>${guest.name}</strong> ${guest.plusOnes > 0 ? `<span style="opacity: 0.6;">(+${guest.plusOnes} plus one${guest.plusOnes > 1 ? 's' : ''})</span>` : ''}
+                        <small>📧 ${guest.email || 'Not provided'} | 📞 ${guest.phone || 'Not provided'}</small>
+                        <small>RSVP: ${guest.rsvp} | Meal: ${guest.meal || 'Not selected'}${guest.diet ? ` | Dietary: ${guest.diet}` : ''}</small>
+                    </div>
+                    <button class="delete-btn" onclick="deleteGuest(${guest.id})">Delete</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function deleteGuest(id) {
+            data.guests = data.guests.filter(g => g.id !== id);
+            renderGuests();
+            updateDashboard();
+        }
+
+        function addVendor() {
+            const vendor = {
+                id: Date.now(),
+                type: document.getElementById('vendorType').value,
+                name: document.getElementById('vendorName').value,
+                contact: document.getElementById('vendorContact').value,
+                phone: document.getElementById('vendorPhone').value,
+                quote: parseFloat(document.getElementById('vendorQuote').value) || 0,
+                deposit: parseFloat(document.getElementById('vendorDeposit').value) || 0,
+                status: document.getElementById('vendorStatus').value,
+                notes: document.getElementById('vendorNotes').value
+            };
+
+            if (vendor.name && vendor.type) {
+                data.vendors.push(vendor);
+                clearVendorForm();
+                renderVendors();
+                updateDashboard();
+                showSuccess('✨ Vendor added to your list!');
+            }
+        }
+
+        function clearVendorForm() {
+            document.getElementById('vendorType').value = '';
+            document.getElementById('vendorName').value = '';
+            document.getElementById('vendorContact').value = '';
+            document.getElementById('vendorPhone').value = '';
+            document.getElementById('vendorQuote').value = '';
+            document.getElementById('vendorDeposit').value = '';
+            document.getElementById('vendorStatus').value = 'Inquiry';
+            document.getElementById('vendorNotes').value = '';
+        }
+
+        function renderVendors() {
+            const container = document.getElementById('vendorList');
+            container.innerHTML = '';
+            
+            if (data.vendors.length === 0) {
+                container.innerHTML = '<p style="color: #a0aec0; text-align: center; padding: var(--spacing-xl);">No vendors added yet. Start organizing your vendors!</p>';
+                return;
+            }
+
+            data.vendors.forEach(vendor => {
+                const remaining = vendor.quote - vendor.deposit;
+                const div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `
+                    <div class="item-info" style="flex: 1;">
+                        <strong>${vendor.type}: ${vendor.name}</strong>
+                        <small>👤 ${vendor.contact || 'Not provided'} | 📞 ${vendor.phone || 'Not provided'}</small>
+                        <small>💰 Quote: $${vendor.quote.toLocaleString()} | Deposit: $${vendor.deposit.toLocaleString()} | Remaining: $${remaining.toLocaleString()}</small>
+                        <small>Status: ${vendor.status}${vendor.notes ? ` | Notes: ${vendor.notes}` : ''}</small>
+                    </div>
+                    <button class="delete-btn" onclick="deleteVendor(${vendor.id})">Delete</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function deleteVendor(id) {
+            data.vendors = data.vendors.filter(v => v.id !== id);
+            renderVendors();
+            updateDashboard();
+        }
+
+        function updateTimeline() {
+            const date = document.getElementById('weddingDate').value;
+            if (date) {
+                document.getElementById('weddingDateDetails').value = date;
+                renderTimeline();
+            }
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('timelineContainer');
+            const date = new Date(document.getElementById('weddingDate').value);
+
+            container.innerHTML = '';
+
+            const timelineEvents = [
+                { days: -365, title: '1 Year Before', desc: 'Set your budget & book venue' },
+                { days: -180, title: '6 Months Before', desc: 'Hire vendors & send save-the-dates' },
+                { days: -90, title: '3 Months Before', desc: 'Final confirmations & tastings' },
+                { days: -30, title: '1 Month Before', desc: 'Final fittings & rehearsal' },
+                { days: -7, title: '1 Week Before', desc: 'Confirm all vendors one last time' },
+                { days: 0, title: 'Wedding Day!', desc: 'Celebrate your love!' }
+            ];
+
+            timelineEvents.forEach((event, idx) => {
+                const eventDate = new Date(date.getTime() + event.days * 24 * 60 * 60 * 1000);
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                    <div class="timeline-dot">${idx + 1}</div>
+                    <div class="timeline-content">
+                        <h4>${event.title}</h4>
+                        <p>${event.desc}</p>
+                        <small>📅 ${eventDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</small>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function renderChecklist() {
+            const container = document.getElementById('checklistItems');
+            container.innerHTML = '';
+
+            data.checklist.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.className = `checklist-item ${item.completed ? 'completed' : ''}`;
+                li.innerHTML = `
+                    <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleChecklistItem(${index})">
+                    ${item.text}
+                `;
+                container.appendChild(li);
+            });
+        }
+
+        function toggleChecklistItem(index) {
+            data.checklist[index].completed = !data.checklist[index].completed;
+            renderChecklist();
+        }
+
+        function saveWeddingDetails() {
+            localStorage.setItem('weddingPlannerData', JSON.stringify(data));
+            showSuccess('✨ Wedding details saved successfully!');
+        }
+
+        function updateDashboard() {
+            const totalBudget = parseFloat(document.getElementById('totalBudget').value) || 0;
+            const totalSpent = data.budgetCategories.reduce((sum, cat) => sum + cat.budget, 0);
+            const remaining = totalBudget - totalSpent;
+            const progress = totalBudget > 0 ? (totalSpent / totalBudget * 100) : 0;
+
+            document.getElementById('totalBudgetDisplay').textContent = '$' + totalBudget.toLocaleString();
+            document.getElementById('totalSpentDisplay').textContent = '$' + totalSpent.toLocaleString();
+            document.getElementById('remainingBudgetDisplay').textContent = '$' + Math.max(remaining, 0).toLocaleString();
+            document.getElementById('budgetProgress').style.width = Math.min(progress, 100) + '%';
+            document.getElementById('budgetPercentage').textContent = Math.round(progress) + '%';
+
+            const confirmedRsvps = data.guests.filter(g => g.rsvp === 'Confirmed').length;
+
+            document.getElementById('guestCountDisplay').textContent = data.guests.length;
+            document.getElementById('rsvpCountDisplay').textContent = confirmedRsvps;
+            document.getElementById('vendorCountDisplay').textContent = data.vendors.filter(v => v.status === 'Booked & Confirmed').length;
+
+            const weddingDate = document.getElementById('weddingDate').value;
+            if (weddingDate) {
+                const date = new Date(weddingDate);
+                const today = new Date();
+                const daysUntil = Math.ceil((date - today) / (1000 * 60 * 60 * 24));
+                document.getElementById('daysCountDisplay').textContent = Math.max(daysUntil, 0);
+            }
+        }
+
+        function showSuccess(message) {
+            const msg = document.createElement('div');
+            msg.className = 'success-message show';
+            msg.textContent = message;
+            document.querySelector('.content').insertBefore(msg, document.querySelector('.content').firstChild);
+            setTimeout(() => msg.remove(), 3000);
+        }
+
+        function initialize() {
+            const savedTheme = localStorage.getItem('weddingPlannerTheme') || 'modern';
+            document.body.className = savedTheme;
+            
+            const savedData = localStorage.getItem('weddingPlannerData');
+            if (savedData) {
+                data = JSON.parse(savedData);
+            }
+
+            const savedBudget = localStorage.getItem('weddingPlannerBudget');
+            if (savedBudget) {
+                document.getElementById('totalBudget').value = savedBudget;
+            }
+
+            renderBudgetCategories();
+            renderGuests();
+            renderVendors();
+            renderChecklist();
+            updateDashboard();
+        }
+
+        window.addEventListener('load', initialize);
+    </script>
+</body>
+</html>
